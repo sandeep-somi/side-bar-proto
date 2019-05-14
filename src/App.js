@@ -1,50 +1,70 @@
-import React, { Component, createContext } from 'react';
-import './App.css';
-import Main from './components/Main';
-import { Store } from './store';
+import React from 'react';
+import classnames from 'classnames';
 
-// const App = () => {
-//   const [flag, setFlag] = useState(false);
-//   //useState provide a pair of items first is the variable or the item that we use to store our item and othe other is function that we use to set the data of the first item.
-//   //userState(false) means the default value for the item in this case flag is false.
-  
-//   return (
-//     <div>
-//       <p>You clicked {flag ? 'On' : 'Off' } times</p>
-//       <button onClick={() => setFlag(!flag)}>
-//         Click me
-//       </button>
-//     </div>
-//   )
-// }
+const request = fetch('https://andy-apis.herokuapp.com/products', {}, { Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpZCI6IjVjNDk2MmRkMDE1NjM3MmUyZDYxOGE1NyIsImlhdCI6MTU1NzgyNTcyNSwiZXhwIjoxNTU3ODI5MzI1fQ.aYucbiTRCHCKhtej3I5Pr0ijy7kRko_jt9gh4eua7hI` })
 
-// export default App;
+const menu = [
+  { label: 'Home', icon: 'fas fa-home' },
+  { label: 'Contacts', icon: 'fas fa-address-book' },
+  { label: 'Products', icon: 'fas fa-truck' },
+  { label: 'Orders', icon: 'fas fa-cart-plus' },
+  { label: 'Filters', icon: 'fas fa-filter' },
+  { label: 'Trending', icon: 'fas fa-chart-bar' }
+]
 
-const data = {
-  name: 'Dhruv',
-  lastName: 'Mehndhiratta',
-  address: 'Haryana',
-  phn: '98989898998'
-}
-
-const HOC = (dataToWrap) => (Component) => (props) => {
-  const combinedProps = {
-    ...props,
-    ...dataToWrap
+class App extends React.Component {
+  state = {
+    open: true
   }
-  return <Component {...combinedProps} />
-}
 
-class App extends Component {
+  async componentDidMount() {
+    this.getProducts();
+  }
+
+  getProducts = async () => {
+    try {
+      const result = await request;
+      if (!result.ok) {
+        throw Error(result.statusText)
+      }
+      const json = await result.json();
+      console.log(json);
+      this.setState({ values: json.values })
+    } catch (error) {
+      console.log(error, 'error')
+    }
+  }
+
+  test = async () => {
+      
+  }
+
+  toggle = () => {
+    this.setState({ open: !this.state.open });
+  }
 
   render() {
-    console.log(this.props, 'props');
+    const { open, values = [] } = this.state;
+    const sidebar = classnames({ sidebar: true, closed: !open });
+    const containerApp = classnames({ 'container-app': true });
+    console.log(values, 'val')
+
     return (
-      <Store.Provider value={data}>
-        <Main />
-      </Store.Provider>
+      <div className='app-wrapper'>
+        <div className='navbar'>Header</div>
+        <div className="wrapper">
+          <div className={sidebar}>
+            <ul className="menu-list">
+              {menu.map(item => <li key={item.label}><i className={item.icon} />{item.label}</li>)}
+            </ul>
+          </div>
+          <div className={containerApp}>
+            <button onClick={this.toggle}>toggle</button>
+          </div>
+        </div>
+      </div>
     );
   }
 }
  
-export default HOC({data})(App);
+export default App;

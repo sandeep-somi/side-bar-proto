@@ -1,0 +1,106 @@
+body {
+  font-family: 'ubuntu';
+  margin: auto 0px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+$headerHeight: 70px;
+$sidebarWidth: 250px;
+$padd: 8px;
+$padd-double: 16px;
+
+%button {
+  font-size: 14px;
+  padding: 16px 8px;
+  font-weight: bold;
+  min-width: 100px;
+  border-radius: 0px;
+  transition: background-color .3s;
+  &.block {
+    width: 100%;
+  }
+  &:active {
+    box-shadow: none;
+  }
+  &:focus {
+    outline: none;
+  }
+}
+
+button {
+  @extend %button;
+  background-color: orange;
+  border: 1px solid orange;
+  color: #fff;
+  &:active {
+    background-color: #a26c09;
+  }
+}
+
+.wrapper {
+  display: flex;
+}
+
+.navbar {
+  height: $headerHeight;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  background-color: orange;
+  color: #fff;
+}
+
+.sidebar {
+  display: inline-block;
+  width: 250px;
+  background-color: #aaa;
+  height: 100vh;
+  transition: margin .3s;
+  &.closed {
+    margin-left: -250px;
+  }
+}
+
+.container-app {
+  display: inline-block;
+  width: calc(100%);
+  background-color: #eee;
+  transition: margin .3s;
+  position: relative;
+  padding: 8px;
+}
+
+ul.menu-list {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+  li {
+    color: #444;
+    padding: 20px 8px;
+    position: relative;
+    cursor: pointer;
+    border-bottom: 1px solid #9e9a9a;
+    transition: .3s;
+    &:hover {
+      color: #222;
+      background-color: #bbbbbb;
+    }
+    &:active {
+      color: #000;
+    }
+    i{
+      padding-right: 10px;
+    }
+  }
+}
+
+// @function set-color($color) {
+//   @if(lishtness($color) > 50 ) {
+//     @return green;
+//   } @else {
+//     @return yellow;
+//   }
+// }
